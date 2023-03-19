@@ -43,8 +43,11 @@ async function updateCartItems({body:{cart_id,product_id}, params:{id}}, res) {
     }
   );
 }
-async function deleteCartItems({params:id}, res) {
+async function deleteCartItems({params:{id}}, res) {
   db.run("DELETE FROM cartItems WHERE id=?", [id], (err) => {
+    if(err){
+      res.send(JSON.stringify({response:'Something went wrong'}));
+  }
     res.send(JSON.stringify({ response: "deleted" }));
   });
 }

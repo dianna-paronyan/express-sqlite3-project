@@ -6,7 +6,7 @@ function cartItems_route(app){
     app.get('/allCartItems', authenticateAdminToken, cartItems_controller.allCartItems);
     app.get('/cartItem', authenticateUserToken, cartItems_controller.cartItem);
     app.post('/createCartItems', authenticateUserToken, cartItems_controller.createCartItems);
-    // app.put('/updateCartItems/:id', authenticateUserToken, cartItems_controller.updateCartItems);
+    app.put('/updateCartItems', authenticateUserToken, cartItems_controller.updateCartItems);
     app.delete('/deleteCartItems/:id', authenticateUserToken, cartItems_controller.deleteCartItems);
 }
 

@@ -1,10 +1,16 @@
 const db = require("../index").db;
 const {checkUser}  = require('../jwt/checkIsUser')
 
-async function cart({body:{user_id}}, res) {
-  db.run("INSERT INTO cart(user_id) VALUES(?)", [user_id], (err) => {
-    res.send(JSON.stringify({ response: "created" }));
-  });
+async function cart(req, res) {
+  const {user_id} = req.body;
+  const user = checkUser(req,res);
+  if(user.id === user_id){
+    db.run("INSERT INTO cart(user_id) VALUES(?)", [user_id], (err) => {
+      res.send(JSON.stringify({ response: "Cart Created" }));
+    });
+  }else{
+    return res.sendStatus(403);
+  }
 }
 
 async function userCart(req, res) {
@@ -12,7 +18,7 @@ async function userCart(req, res) {
   const user_id = req.body.user_id
   console.log(user)
   db.all(
-    "SELECT * FROM users join cart on users.id = cart.user_id where cart.user_id = ?",
+    "SELECT * FROM users join cart on  cart.user_id = users.id  where cart.user_id = ?",
     [user_id],
     (err, data) => {
       if (err) {

@@ -6,7 +6,7 @@ const SECRET = process.env.SECRET;
 function authenticateAdminToken(req, res, next) {
   const token = req.headers.authorization;
   console.log(token);
-  if (token == null) {
+  if (token === null) {
     return res.sendStatus(401);
   }
 
@@ -24,7 +24,7 @@ function authenticateAdminToken(req, res, next) {
 function authenticateUserToken(req, res, next) {
   const token = req.headers.authorization;
 
-  if (token == null) {
+  if (token === null) {
     return res.sendStatus(401);
   }
 

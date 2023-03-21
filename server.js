@@ -1,4 +1,3 @@
-const express = require('express');
 const { cartItemsTable } = require('./models/cartItems_schema');
 const { usersTable } = require('./models/users_schema');
 const { cart_route } = require('./routes/cart');
@@ -8,6 +7,7 @@ const {products_route} = require('./routes/products');
 const { users_route } = require('./routes/users');
 const {cartTable} = require('./models/cart_schema')
 const {productsTable} = require('./models/products_schema');
+const express = require('express');
 const port = require('./constants').port;
 const db = require('./index').db;
 const app = express();

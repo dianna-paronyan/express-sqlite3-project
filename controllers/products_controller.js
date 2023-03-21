@@ -2,6 +2,9 @@ const db = require('../index').db;
 
 async function allProducts(req,res){
     db.all("SELECT * FROM products", [], (err, data) => {
+        if(err){
+            res.send(JSON.stringify({response:'Something went wrong'}));
+          }
         res.send(data);
     });
 }

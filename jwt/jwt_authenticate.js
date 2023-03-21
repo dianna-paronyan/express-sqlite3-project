@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const SECRET = process.env.SECRET;
 
-function authenticateAdminToken(req, res, next) {
+function adminAuthorization(req, res, next) {
   const token = req.headers.authorization;
   console.log(token);
   if (token === null) {
@@ -21,7 +21,7 @@ function authenticateAdminToken(req, res, next) {
   });
 }
 
-function authenticateUserToken(req, res, next) {
+function userAuthorization(req, res, next) {
   const token = req.headers.authorization;
 
   if (token === null) {
@@ -40,6 +40,6 @@ function authenticateUserToken(req, res, next) {
 }
 
 module.exports = {
-  authenticateAdminToken,
-  authenticateUserToken,
+  adminAuthorization,
+  userAuthorization,
 };

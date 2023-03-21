@@ -13,10 +13,10 @@ function authenticateAdminToken(req, res, next) {
   jwt.verify(token, SECRET, (err, user) => {
     if (err) {
       return res.sendStatus(403);
-    }
-    console.log(user);
-    if (user.username === "admin" && user.role === 1) {
+    }else if (user.username === "admin" && user.role === 1) {
       next();
+    }else{
+      return res.sendStatus(401);
     }
   });
 }
@@ -31,10 +31,10 @@ function authenticateUserToken(req, res, next) {
   jwt.verify(token, SECRET, (err, user) => {
     if (err) {
       return res.sendStatus(403);
-    }
-    console.log(user);
-    if (user.username !== "admin" && user.role === 0) {
+    }else if (user.username !== "admin" && user.role === 0) {
       next();
+    }else{
+      return res.sendStatus(401);
     }
   });
 }

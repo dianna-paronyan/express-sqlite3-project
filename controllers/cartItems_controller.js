@@ -4,7 +4,7 @@ const {checkUser}  = require('../jwt/checkIsUser')
 async function allCartItems(req, res) {
   db.all("SELECT * FROM cartItems", [], (err, data) => {
     if(err){
-			res.send(JSON.stringify({response: "Ыomething went wrong"}))
+			res.send(JSON.stringify({response: "Something went wrong"}))
 		}
     res.send(data);
   });
@@ -29,18 +29,36 @@ async function cartItem(req, res) {
 }
 
 async function createCartItems(req, res) {
-  const {cart_id,product_id} = req.body;
+  const {cart_id,product_id,quantity} = req.body;
   const user = checkUser(req,res);
   if(user.id === cart_id){
     db.run(
-      "INSERT INTO cartItems(cart_id,product_id) VALUES(?,?)",
-      [cart_id, product_id],
+      "INSERT INTO cartItems(cart_id,product_id,quantity) VALUES(?,?,?)",
+      [cart_id, product_id,quantity],
       (err) => {
         if(err){
-          console.log(err);
          return res.send(JSON.stringify({ response: "Something went wrong" }));
         }
         res.send(JSON.stringify({ response: "created" }));
+      }
+    );
+  }else{
+    return res.sendStatus(403);
+  }  
+}
+
+async function updateCartItems(req, res) {
+  const {quantity,cart_id,product_id} = req.body;
+  const user = checkUser(req,res);
+  if(user.id === cart_id){
+    db.run(
+      "UPDATE cartItems SET quantity = ? WHERE cart_id = ? and product_id = ?",
+      [quantity, cart_id, product_id],
+      (err) => {
+        if(err){
+         return res.send(JSON.stringify({ response: "Something went wrong" }));
+        }
+        res.send(JSON.stringify({ response: "updated" }));
       }
     );
   }else{
@@ -70,7 +88,7 @@ module.exports = {
   allCartItems,
   cartItem,
   createCartItems,
-  // updateCartItems,
+  updateCartItems,
   deleteCartItems,
   checkUser
 };

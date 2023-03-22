@@ -8,13 +8,17 @@ async function register({body:{username,password}},res){
 
     const salt = await bcrypt.genSalt(10);
     const hashed_password = await bcrypt.hash(password, salt)
-    const sql = 'INSERT INTO users(username, password,role) VALUES (?,?,?)';
-    db.run(sql, [username,hashed_password, 0],(err)=>{
-        if(err){
-            res.send(JSON.stringify({status:'Error Reigstering'}));
-        }
-        res.send(JSON.stringify({status: 'User Created'}));
-    })
+    if(!username){
+        const sql = 'INSERT INTO users(username, password,role) VALUES (?,?,?)';
+        db.run(sql, [username,hashed_password, 0],(err)=>{
+            if(err){
+                res.send(JSON.stringify({status:'Error Reigstering'}));
+            }
+            res.send(JSON.stringify({status: 'User Created'}));
+        })
+    }else{
+        res.send(JSON.stringify({status: 'User already exists'}));
+    }
 }
 
 async function login({body:{username,password}},res){

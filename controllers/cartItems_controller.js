@@ -1,7 +1,7 @@
 const db = require("../index").db;
 const {checkUser}  = require('../jwt/checkIsUser')
 
-async function allCartItems(req, res) {
+function allCartItems(req, res) {
   db.all("SELECT * FROM cartItems", [], (err, data) => {
     if(err){
 			res.send(JSON.stringify({response: "Something went wrong"}))
@@ -10,7 +10,7 @@ async function allCartItems(req, res) {
   });
 }
 
-async function cartItem(req, res) {
+function cartItem(req, res) {
   const {cart_id} = req.body;
   const user = checkUser(req,res);
   db.all(
@@ -28,45 +28,49 @@ async function cartItem(req, res) {
   );
 }
 
-async function createCartItems(req, res) {
-  const {cart_id,product_id,quantity} = req.body;
+function createCartItems(req, res) {
+  const {cart_id,product_id} = req.body;
   const user = checkUser(req,res);
+
   if(user.id === cart_id){
-    db.run(
-      "INSERT INTO cartItems(cart_id,product_id,quantity) VALUES(?,?,?)",
-      [cart_id, product_id,quantity],
-      (err) => {
-        if(err){
-         return res.send(JSON.stringify({ response: "Something went wrong" }));
+      db.run(
+        "INSERT INTO cartItems(cart_id,product_id,quantity) VALUES(?,?,?)",
+        [cart_id, product_id,1],
+        (err) => {
+          if(err){
+           return res.send(JSON.stringify({ response: "Something went wrong" }));
+          }
+          res.send(JSON.stringify({ response: "created" }));
         }
-        res.send(JSON.stringify({ response: "created" }));
-      }
-    );
+      );
   }else{
     return res.sendStatus(403);
   }  
 }
 
-async function updateCartItems(req, res) {
+function updateCartItems(req, res) {
   const {quantity,cart_id,product_id} = req.body;
   const user = checkUser(req,res);
+
   if(user.id === cart_id){
-    db.run(
-      "UPDATE cartItems SET quantity = ? WHERE cart_id = ? and product_id = ?",
-      [quantity, cart_id, product_id],
-      (err) => {
-        if(err){
-         return res.send(JSON.stringify({ response: "Something went wrong" }));
+   
+      db.run(
+        "UPDATE cartItems SET quantity = ? WHERE cart_id = ? and product_id = ?",
+        [quantity, cart_id, product_id],
+        (err) => {
+          if(err){
+           return res.send(JSON.stringify({ response: "Something went wrong" }));
+          }
+          res.send(JSON.stringify({ response: "updated" }));
         }
-        res.send(JSON.stringify({ response: "updated" }));
-      }
-    );
+      );
+    
   }else{
     return res.sendStatus(403);
   }  
 }
 
-async function deleteCartItems(req, res) {
+function deleteCartItems(req, res) {
   const {id} = req.params;
   const {cart_id} = req.body;
   const user = checkUser(req,res);
@@ -92,3 +96,5 @@ module.exports = {
   deleteCartItems,
   checkUser
 };
+
+

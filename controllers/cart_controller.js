@@ -1,7 +1,7 @@
 const db = require("../index").db;
 const {checkUser}  = require('../jwt/checkIsUser')
 
-async function cart(req, res) {
+function cart(req, res) {
   const {user_id} = req.body;
   const user = checkUser(req,res);
   if(user.id === user_id){
@@ -13,7 +13,7 @@ async function cart(req, res) {
   }
 }
 
-async function userCart(req, res) {
+function userCart(req, res) {
   const user = checkUser(req,res);
   const user_id = req.body.user_id
   console.log(user)
